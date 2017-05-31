@@ -2,7 +2,10 @@ const mongoose = require('mongoose')
 
 let kittySchema = mongoose.Schema({
   name: String,
-  breed: String
+  breed: {
+    type: String,
+    unique: true
+  }
 })
 // you can also set schema options
 // new Schema({}, options)

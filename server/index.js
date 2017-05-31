@@ -20,3 +20,4 @@ let tobby = new Kitten({
 
 // Kitten.find({name: 'tobby'}, (err, data) => console.log(data))
 // console.log(tobby.fullInfo);
+console.log(tobby);

@@ -1,6 +1,6 @@
 const config = {
   local: {
-    db: 'mongodb://localhost:27017'
+    db: 'mongodb://192.168.2.108:27017'
   }
 }
 module.exports = config['local']

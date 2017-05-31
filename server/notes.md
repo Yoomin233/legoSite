@@ -43,3 +43,8 @@ schema options can be passed as second value.
 const mySchema = new Sehema({types...}, optionObject)
 ```
 for detailed possible settings, ==see== [here](http://mongoosejs.com/docs/guide.html).
+schema types: `required, default, select, validate, get, set, alias`. see [here](http://mongoosejs.com/docs/schematypes.html).
+
+#### module(node api)
+模块导出: `exports.varName`
+默认模块导出: `module.exports`
