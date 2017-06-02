@@ -1,7 +1,8 @@
 var Book = require('../models/book');
+const fs = require('fs')
 
 exports.index = function(req, res) {
-    res.send('NOT IMPLEMENTED: Site Home Page');
+  res.render('./catalog/catalogIndex', {title: 'Catalog Index!'});
 };
 
 // Display list of all books

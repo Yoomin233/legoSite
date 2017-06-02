@@ -48,3 +48,6 @@ schema types: `required, default, select, validate, get, set, alias`. see [here]
 #### module(node api)
 模块导出: `exports.varName`
 默认模块导出: `module.exports`
+
+#### MVC
+routes forward request to controllers, controllers combine model and view and render the response, and send it to the end-user. 
