@@ -7,8 +7,18 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var catalog = require('./routes/catalog')
 
 var app = express();
+
+const mongoose = require('mongoose')
+mongoose.Promise = global.Promise
+
+mongoose.connect('mongodb://yuemin:yuemin@ds157971.mlab.com:57971/mongo')
+const db = mongoose.connection
+
+db.once('open', () => console.log('mongodb connected!'))
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,8 +35,10 @@ app.use(cookieParser());
 // static files, served from '/'
 app.use(express.static(path.join(__dirname, 'public')));
 
+// route function to forward the supported requests and additional info to the appropriate controller functions
 app.use('/', index);
 app.use('/users', users);
+app.use('/catalog', catalog)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -48,5 +60,6 @@ app.use(function(err, req, res, next) {
 
 // mongoose is a mongodb object modeling tool (ORM/ODM)
 
+// connect to mongodb database
 
 module.exports = app;

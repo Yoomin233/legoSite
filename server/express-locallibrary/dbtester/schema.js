@@ -24,7 +24,7 @@ const breakfastSchema = new Schema({
 exports.someModel = mongoose.model('someModel', someSchema)
 exports.breakfastModel = mongoose.model('breakfastModel', breakfastSchema)
 
-// define ObjectId and ref (to associate models)
+// define ObjectId and ref (to associate relationship between different models). use populate() to populate actual information (from other model/documents) into the document. 
 const authorSchema = new Schema({
   name: String,
   stories: [{
