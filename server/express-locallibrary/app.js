@@ -18,7 +18,7 @@ mongoose.connect('mongodb://yuemin:yuemin@ds157971.mlab.com:57971/mongo')
 const db = mongoose.connection
 
 db.once('open', () => console.log('mongodb connected!'))
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.on('error', console.error.bind(console, 'MongoDB connection errr:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

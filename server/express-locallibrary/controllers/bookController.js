@@ -1,13 +1,23 @@
 var Book = require('../models/book');
+var Author = require('../models/author');
+var Genre = require('../models/genre');
+var BookInstance = require('../models/bookinstance');
+
 const fs = require('fs')
 
-exports.index = function(req, res) {
-  res.render('./catalog/catalogIndex', {title: 'Catalog Index!'});
+exports.index = async function(req, res) {
+  try {
+    let results = await Promise.all([Book.count(), BookInstance.count(),  BookInstance.count({status:'Available'}), Author.count(), Genre.count()])
+    res.render('./catalog/catalogIndex', {title:'Local Libraty Home', data: results})
+  } catch (err) {
+    res.render('./catalog/catalogIndex', {title:'Local Libraty Home', error:err})
+  }
 };
 
 // Display list of all books
-exports.book_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: Book list');
+exports.book_list = async function(req, res) {
+    let bookList = await Book.find({}, 'title author').populate('author').exec()
+    res.render('./catalog/book_list', {title: 'Book List', bookList})
 };
 
 // Display detail page for a specific book

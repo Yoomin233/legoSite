@@ -33,4 +33,9 @@ app.use((err, req, res, next) => {
   res.status(500).send('something went wrong')
 })
 
+// template rendering, call res.render(templateFileName, data) to render
+// app.get('/', function(req, res) {
+//   res.render('index', { title: 'About dogs', message: 'Dogs rock!' });
+// });
+
 app.listen(3202, () => console.log(`listening!${cool()}`))
