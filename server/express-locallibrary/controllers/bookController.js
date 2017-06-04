@@ -21,8 +21,9 @@ exports.book_list = async function(req, res) {
 };
 
 // Display detail page for a specific book
-exports.book_detail = function(req, res) {
-    res.send('NOT IMPLEMENTED: Book detail: ' + req.params.id);
+exports.book_detail = async function(req, res) {
+  let result = await Promise.all([Book.findById(req.params.id).populate('author').populate('genre').exec(), BookInstance.find({'book': req.params.id}).exec()])
+  res.render('./catalog/bookDetail', {title: 'Book Title', book: result[0], bookInstances: result[1]})
 };
 
 // Display book create form on GET
