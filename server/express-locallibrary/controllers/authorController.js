@@ -1,4 +1,5 @@
 var Author = require('../models/author');
+var Book = require('../models/book')
 
 // Display list of all Authors
 exports.author_list = async function(req, res, next) {
@@ -12,8 +13,9 @@ exports.author_list = async function(req, res, next) {
 };
 
 // Display detail page for a specific Author
-exports.author_detail = function(req, res) {
-    res.send('NOT IMPLEMENTED: Author detail: ' + req.params.id);
+exports.author_detail = async function(req, res) {
+  let result = await Promise.all([Author.findById(req.params.id).exec(), Book.find({'author': req.params.id}, 'title summary').exec()])
+  res.render('./catalog/authorDetail', {title: 'Author Detail', author: result[0], authorBooks: result[1] })
 };
 
 // Display Author create form on GET

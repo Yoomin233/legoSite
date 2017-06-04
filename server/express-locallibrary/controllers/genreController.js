@@ -15,12 +15,32 @@ exports.genre_detail = async function(req, res) {
 
 // Display Genre create form on GET
 exports.genre_create_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: Genre create GET');
+    res.render('catalog/genre_form', {title: 'Create Genre'})
 };
 
 // Handle Genre create on POST
-exports.genre_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Genre create POST');
+exports.genre_create_post = async function(req, res) {
+  req.checkBody('name', 'Genre name required').notEmpty()
+  req.sanitize('name').escape()
+  req.sanitize('name').trim()
+
+  let errors = req.validationErrors()
+
+  let genre = new Genre({
+    name: req.body.name
+  })
+
+  if (errors) {
+    return res.render('catalog/genre_form', {title: 'Create Genre', genre, errors})
+  } else {
+    let findGenre = await Genre.findOne({'name': req.body.name}).exec()
+    if (findGenre) {
+      res.redirect(findGenre.url)
+    } else {
+      let newGenre = await genre.save()
+      res.redirect(newGenre.url)
+    }
+  }
 };
 
 // Display Genre delete form on GET

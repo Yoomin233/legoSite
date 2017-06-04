@@ -1,10 +1,14 @@
 var express = require('express');
 var path = require('path');
+
+/* middlewares */
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator')
 
+/* routes */
 var index = require('./routes/index');
 var users = require('./routes/users');
 var catalog = require('./routes/catalog')
@@ -34,6 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 // static files, served from '/'
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressValidator())
 
 // route function to forward the supported requests and additional info to the appropriate controller functions
 app.use('/', index);
