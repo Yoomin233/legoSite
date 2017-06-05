@@ -7,11 +7,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator')
+var compression = require('compression')
+var helmet = require('helmet')
+var session = require('express-session')
 
 /* routes */
 var index = require('./routes/index');
 var users = require('./routes/users');
 var catalog = require('./routes/catalog')
+var sessionDemo = require('./routes/sessionDemo')
 
 var app = express();
 
@@ -29,21 +33,33 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
+app.use(helmet())
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 // body parser used to read POST parameters
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // populate cookie to req.cookies
-app.use(cookieParser());
+// app.use(cookieParser());
+
+app.use(compression())
+app.use(expressValidator())
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60000
+  }
+}))
 // static files, served from '/'
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(expressValidator())
 
 // route function to forward the supported requests and additional info to the appropriate controller functions
 app.use('/', index);
 app.use('/users', users);
 app.use('/catalog', catalog)
+app.use('/sessionDemo', sessionDemo)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

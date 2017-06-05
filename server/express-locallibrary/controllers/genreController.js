@@ -20,6 +20,7 @@ exports.genre_create_get = function(req, res) {
 
 // Handle Genre create on POST
 exports.genre_create_post = async function(req, res) {
+  /* validate form fields */
   req.checkBody('name', 'Genre name required').notEmpty()
   req.sanitize('name').escape()
   req.sanitize('name').trim()
