@@ -1,0 +1,6 @@
+extends header
+block content
+  h2=`Hello, ${username}`
+  p=`You have viewed this page for ${views} times`
+  form(method='POST' action='/sessionDemo/logout')
+    button.btn.btn-primary(type='submit') Logout

@@ -1,0 +1,11 @@
+extends header
+block content
+  h1=`This is ${title}`
+  p please login first!
+  form(method='POST' action='/sessionDemo/login')
+    div.form-group
+      label(for='username') Username:
+        input#username.form-control(type='text', placehoder='username', name='username' required='true' value='hym92')
+      label(for='password') Password:
+        input#password.form-control(type='text', placehoder='password', name='password' required='true' value='hym92')
+    button.btn.btn-primary(type='submit') Submit

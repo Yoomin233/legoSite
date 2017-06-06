@@ -10,6 +10,7 @@ var expressValidator = require('express-validator')
 var compression = require('compression')
 var helmet = require('helmet')
 var session = require('express-session')
+var MongoStore = require('connect-mongo')(session)
 
 /* routes */
 var index = require('./routes/index');
@@ -25,7 +26,7 @@ mongoose.Promise = global.Promise
 mongoose.connect('mongodb://yuemin:yuemin@ds157971.mlab.com:57971/mongo')
 const db = mongoose.connection
 
-db.once('open', () => console.log('mongodb connected!'))
+db.once('open', () => console.log(`mongodb connected!, env: ${process.env.NODE_ENV}`))
 db.on('error', console.error.bind(console, 'MongoDB connection errr:'));
 
 // view engine setup
@@ -44,14 +45,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(compression())
 app.use(expressValidator())
+
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 60000
-  }
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: db
+  })
 }))
+
 // static files, served from '/'
 app.use(express.static(path.join(__dirname, 'public')));
 
