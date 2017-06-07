@@ -50,4 +50,9 @@ schema types: `required, default, select, validate, get, set, alias`. see [here]
 默认模块导出: `module.exports`
 
 #### MVC
-routes forward request to controllers, controllers combine model and view and render the response, and send it to the end-user. 
+routes forward request to controllers, controllers combine model and view and render the response, and send it to the end-user.
+
+#### MongoDB queries syntax
+##### `find` method
+`Model.find(conditions, [fields], [options], [callback])`
+for example
