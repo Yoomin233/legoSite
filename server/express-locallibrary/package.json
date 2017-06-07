@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "pm2 start ./bin/www --watch"
+    "prod": "NODE_ENV=production pm2 start ./bin/www --watch",
+    "start": "NODE_ENV=development pm2 start ./bin/www --watch"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
@@ -14,7 +15,9 @@
     "ejs": "^2.5.6",
     "express": "~4.15.2",
     "express-validator": "^3.2.0",
+    "fs-extra": "^3.0.1",
     "helmet": "^3.6.1",
+    "marked": "^0.3.6",
     "mongoose": "^4.10.4",
     "morgan": "~1.8.1",
     "pug": "~2.0.0-beta11",

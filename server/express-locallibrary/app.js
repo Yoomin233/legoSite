@@ -17,6 +17,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var catalog = require('./routes/catalog')
 var sessionDemo = require('./routes/sessionDemo')
+var apiRouter = require('./routes/api')
 
 var app = express();
 
@@ -63,6 +64,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/catalog', catalog)
 app.use('/sessionDemo', sessionDemo)
+app.use('/api', apiRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

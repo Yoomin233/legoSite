@@ -1,0 +1,23 @@
+doctype html
+html(lang='en')
+  head
+    title='api tester'
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+  body
+    h1 This is api tester page
+    button.sendAjax sendAjax
+    script.
+      function sendAjax (url, method, cb, data=null) {
+        var xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                cb(this.responseText)
+            }
+        }
+        xhttp.open(method, url, true)
+        xhttp.send(data)
+      }
+      document.querySelector('button.sendAjax').addEventListener('click', (e) => {
+        sendAjax('http://localhost:3050/api/get', 'GET', (resp) => console.log(resp))
+      })

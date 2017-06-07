@@ -3,7 +3,28 @@ var Author = require('../models/author');
 var Genre = require('../models/genre');
 var BookInstance = require('../models/bookinstance');
 
-const fs = require('fs')
+const marked = require('marked')
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: true,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false
+});
+
+const fs = require('fs-extra')
+
+exports.tester = async function (req, res, next) {
+  try {
+    let markdownContent = await fs.readFile('markdown/notes.md', 'utf8')
+    res.send(marked(markdownContent))
+  } catch (e) {
+    next(e)
+  }
+}
 
 exports.index = async function(req, res) {
   try {
