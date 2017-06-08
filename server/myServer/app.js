@@ -7,11 +7,21 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session')
+var cors = require('cors')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var userRouter = require('./routes/login')
 
 var app = express();
+
+// connecting to db
+const mongoose = require('mongoose')
+mongoose.Promise = global.Promise
+mongoose.connect('mongodb://yuemin:yuemin@ds157971.mlab.com:57971/mongo')
+const db = mongoose.connection
+db.once('open', () => console.log(`mongodb connected!, env: ${process.env.NODE_ENV}`))
+db.on('error', console.error.bind(console, 'MongoDB connection errr:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,8 +31,8 @@ app.set('view engine', 'pug');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors())
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
