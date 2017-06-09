@@ -6,12 +6,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var session = require('express-session')
+var MongoStore = require('connect-mongo')(session)
+
 var cors = require('cors')
+var compression = require('compression')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var userRouter = require('./routes/login')
+var lego = require('./routes/lego');
+var blog = require('./routes/blog');
 
 var app = express();
 
@@ -32,11 +37,22 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(compression())
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: db
+  })
+}))
 app.use(cors())
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/lego', lego)
+app.use('/blog', blog)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

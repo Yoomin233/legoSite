@@ -4,20 +4,21 @@ var router = express.Router();
 const User = require('../models/userModel')
 
 /* users router */
-router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'Express' });
-});
 
+// 登录动作
 router.post('/login', async (req, res, next) => {
-  let searchResult = await User.findOne({username: req.body.username})
+  let findUser = await User.findOne({username: req.body.username})
   let respObject
-  if (!searchResult) {
+  let sess = req.session
+  if (!findUser) {
     respObject = {
       code: -1,
       message: '用户不存在'
     }
   } else {
-    if (searchResult.password === req.body.password) {
+    if (findUser.password === req.body.password) {
+      // 登录成功后, 附加session相关信息
+      sess.user = findUser
       respObject = {
         code: 1,
         message: "success"
@@ -32,6 +33,7 @@ router.post('/login', async (req, res, next) => {
   res.json(respObject)
 })
 
+// 注册动作
 router.post('/register', async (req, res, next) => {
   let oldUser = await User.findOne({username: req.body.username})
   if (oldUser) {
@@ -55,6 +57,17 @@ router.post('/register', async (req, res, next) => {
       next(e)
     }
   }
+})
+
+// 注销动作
+router.get('/logout', (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      next(err)
+    } else {
+      res.redirect('/')
+    }
+  })
 })
 
 module.exports = router;

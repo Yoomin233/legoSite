@@ -1,5 +1,34 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+doctype html
+html
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='/stylesheets/global.css')
+    link(rel='stylesheet', href='/stylesheets/index.css')
+  body
+    h1= title
+    if user
+      div.userinfo
+        p 欢迎登录, #{user.username}
+          | &nbsp;&nbsp;
+          a.a-button(href='/users/logout') 登出
+        p 您的权限为:
+          if user.jurisdiction===1
+            span.view 浏览
+          else if user.jurisdiction===2
+            span.edit 编辑
+          else if user.jurisdiction===3
+            span.super 超级管理员
+    else
+      p 欢迎光临本站!
+      p 您可以:
+        | &nbsp;&nbsp;
+        a.a-button(href='/login.html') 登录
+    h3 请选择板块:
+      div.blockContainer
+        div.lego
+          div.content 乐高
+        div.blog
+          div.content 博客
+    script(type='text/javascript', src='/javascripts/index.js')

@@ -1,0 +1,54 @@
+body {
+  background-color: #f8f8f8;
+}
+form.loginform {
+  margin: 10px;
+  margin-top:20%;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  h2 {
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+  }
+  p {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    label {
+      font-size: 1rem;
+      line-height: 2rem;
+    }
+    input {
+      padding: .5rem;
+      vertical-align: middle;
+      width: 60%;
+      transition: box-shadow .5s ease;
+      outline: none;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+      &:focus {
+        outline: none;
+        box-shadow: 0px 0px 10px 0px rgba(56, 56, 198, .5);
+      }
+    }
+    &.buttons {
+      justify-content: space-around;
+      button {
+        max-width: 40%;
+        font-size: 1.2rem;
+        border: none;
+        color: #fff;
+        padding: .5em;
+        border-radius: 4px;
+        &.login, &.gobackLogin {
+          background-color: #449d44;
+        }
+      }
+    }
+  }
+}
