@@ -1,6 +1,46 @@
+.sideBarToggle {
+  position: absolute;
+  z-index: 10;
+  left: 3vh;
+  top: 3vh;
+  color: #ddd;
+}
 .sideBar {
-  display: block;
-  li {
-    color: yellow;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 40%;
+  height: 100%;
+  background-color: rgba(30, 30, 30, 0.8);
+  padding: 8vh 3vh;
+  box-sizing: border-box;
+  transition: all .3s ease;
+  transform: translateX(-100%);
+  opacity: 0;
+  border-right: 1px solid #ddd;
+  > .sideBarShade {
+    position: absolute;
+    right: -150%;
+    top: 0;
+    width: 150%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(30, 30, 30, 0.8) 0%, transparent 100%);
   }
+  li {
+    list-style: none;
+    padding: 1em 0;
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #ddd;
+    }
+    a {
+      text-decoration: none;
+      color: #ddd;
+      font-size: 1.5em;
+    }
+  }
+}
+.sideBarShowed {
+  transform: none;
+  opacity: 1;
 }
