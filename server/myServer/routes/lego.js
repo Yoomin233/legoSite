@@ -12,6 +12,16 @@ router.get('/', (req, res, next) => {
       no: 42030,
       theme: 'Technic',
       stock: 2
+    },
+    {
+      no: 42007,
+      theme: 'Technic',
+      stock: 2
+    },
+    {
+      no: 42006,
+      theme: 'Technic',
+      stock: 2
     }
   ])
 })

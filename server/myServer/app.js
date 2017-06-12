@@ -17,6 +17,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var lego = require('./routes/lego');
 var blog = require('./routes/blog');
+var user = require('./routes/user')
 
 var app = express();
 
@@ -56,6 +57,7 @@ app.use('/users', users);
 
 app.use('/api/lego', lego)
 app.use('/api/blog', blog)
+app.use('/api/user', user)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
