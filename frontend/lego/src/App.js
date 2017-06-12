@@ -3,17 +3,15 @@ import React, { Component } from 'react';
 // router
 import {
   BrowserRouter as Router,
-  Route,
-  Link
+  Route
 } from 'react-router-dom'
+
 // components
+import Header from './components/header.js'
+import SideBar from './components/sideBar.js'
+import LoadingIndicator from './components/loadingIndicator.js'
+
 import Home from './components/Home.js'
-
-import appCss from './stylesheets/App.less'
-import './stylesheets/transitions.css'
-
-import config from './config'
-import axios from 'axios'
 
 const About = () => (
   <div>
@@ -25,26 +23,24 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      sideBarShow: true
+      sideBarShow: false
     }
   }
   componentDidMount () {
-    console.log('mounted!')
+  }
+  toggleSideBar = (e) => {
+    this.setState({
+      sideBarShow: !this.state.sideBarShow
+    })
   }
   render() {
     let {sideBarShow} = this.state
     return (
       <Router>
-        <div style={{width: '100%',height: '100%', position: 'relative'}}>
-          <div className={appCss.sideBarToggle} onClick={(e) => this.setState({sideBarShow: !sideBarShow})}>
-            {sideBarShow ? 'hide' : 'show'}
-          </div>
-            <div className={`${appCss.sideBar} ${sideBarShow ? appCss.sideBarShowed : ''}`}>
-              <li><Link to="/">首页</Link></li>
-              <li><Link to="/about">管理</Link></li>
-              <li><Link to="/about">关于</Link></li>
-              <div className={appCss.sideBarShade} onClick={(e) => this.setState({sideBarShow: !sideBarShow})}></div>
-            </div>
+        <div style={{width: '100%',height: '100%', position: 'relative', overflow: 'hidden'}}>
+          <LoadingIndicator></LoadingIndicator>
+          <Header sideBarShow={sideBarShow} toggleSideBar={this.toggleSideBar}></Header>
+          <SideBar sideBarShow={sideBarShow} toggleSideBar={this.toggleSideBar}></SideBar>
           <Route exact path="/" component={Home}/>
           <Route path="/about" component={About}/>
         </div>

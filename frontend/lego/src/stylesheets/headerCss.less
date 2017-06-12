@@ -1,0 +1,23 @@
+@import 'variables.less';
+.appHeader {
+  width: 100%;
+  height: @header-height;
+  background-color: #444;
+  position: fixed;
+  color: #ddd;
+  line-height: @header-height;
+  text-align: center;
+  font-size: 1.3em;
+  > span:first-child {
+    position: absolute;
+    left: 5%;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: inline-block;
+    &::before {
+      font-family: 'icomoon' !important;
+      content: "\e900";
+    }
+  }
+}
