@@ -1,9 +1,9 @@
 const config = {
   development: {
-    rootURL: 'http://192.168.27.110:3080'
+    rootURL: 'http://192.168.31.146:3080'
   },
   production: {
-    rootURL: 'http://192.168.27.110:3080'
+    rootURL: 'http://192.168.31.146:3080'
   }
 }
 

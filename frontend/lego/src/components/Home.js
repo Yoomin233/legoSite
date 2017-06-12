@@ -7,11 +7,6 @@ import homeCss from '../stylesheets/home.less'
 import xhr from '../tools/xhr'
 import config from '../config'
 
-const images = [
-  'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42009_alt6?$main$',
-  'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42009_alt3?$main$'
-]
-
 class Home extends Component {
   constructor (props) {
     super(props)
@@ -20,7 +15,8 @@ class Home extends Component {
       checkedSet: [],
       userInfo: null,
       lightboxOpen: false,
-      photoIndex: 0
+      lightboxImages: [],
+      lightboxIndex: 0
     }
   }
   componentDidMount = async () => {
@@ -58,7 +54,7 @@ class Home extends Component {
     }
   }
   render () {
-    let {legoData, lightboxOpen, photoIndex} = this.state
+    let {legoData, lightboxOpen, lightboxIndex, lightboxImages} = this.state
     return (
       <div className={homeCss.wrapper}>
         <table>
@@ -73,7 +69,7 @@ class Home extends Component {
           </thead>
           <tbody>
             {
-              legoData.map((item, index) => (
+              legoData.length ? legoData.map((item, index) => (
                 <tr key={item.no} onClick={(e) => this.chooseRow(item.no, index)}>
                   <td><input type='checkbox' checked={this.state.checkedSet.includes(item.no)}/></td>
                   <td>{item.no}</td>
@@ -82,26 +78,26 @@ class Home extends Component {
                   <td onClick={(e) => {
                     e.stopPropagation()
                     this.setState({
-                      lightboxOpen: true
+                      lightboxOpen: true,
+                      lightboxImages: legoData[index]['images']
                     })
-                    console.log(item.no)
                   }}>查看</td>
                 </tr>
-              ))
+              )) : <tr><td colSpan='5'>暂无数据！</td></tr>
             }
           </tbody>
         </table>
         {lightboxOpen &&
           <Lightbox
-              mainSrc={images[photoIndex]}
-              nextSrc={images[(photoIndex + 1) % images.length]}
-              prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+              mainSrc={lightboxImages[lightboxIndex].url}
+              nextSrc={lightboxImages[(lightboxIndex + 1) % lightboxImages.length].url}
+              prevSrc={lightboxImages[(lightboxIndex + lightboxImages.length - 1) % lightboxImages.length].url}
               onCloseRequest={() => this.setState({ lightboxOpen: false })}
               onMovePrevRequest={() => this.setState({
-                  photoIndex: (photoIndex + images.length - 1) % images.length,
+                  lightboxIndex: (lightboxIndex + lightboxImages.length - 1) % lightboxImages.length,
               })}
               onMoveNextRequest={() => this.setState({
-                  photoIndex: (photoIndex + 1) % images.length,
+                  lightboxIndex: (lightboxIndex + 1) % lightboxImages.length,
               })}
           />
       }
