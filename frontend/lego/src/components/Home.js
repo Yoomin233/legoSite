@@ -23,7 +23,7 @@ class Home extends Component {
     let userInfo
     let legoData
     if (process.env.NODE_ENV === 'development') {
-      userInfo = JSON.parse('{"username":"user3","jurisdiction":1}')
+      userInfo = JSON.parse('{"username":"user3","jurisdiction":3}')
     } else {
       userInfo = JSON.parse(await xhr.get(`${config.rootURL}/api/user`)).user
     }
@@ -54,9 +54,10 @@ class Home extends Component {
     }
   }
   render () {
-    let {legoData, lightboxOpen, lightboxIndex, lightboxImages} = this.state
+    let {legoData, userInfo, lightboxOpen, lightboxIndex, lightboxImages} = this.state
     return (
       <div className={homeCss.wrapper}>
+        <p className={homeCss.addBtn}><button className={'btn-primary'}>新增</button></p>
         <table>
           <thead>
             <tr>
@@ -65,6 +66,9 @@ class Home extends Component {
               <td>系列</td>
               <td>库存</td>
               <td>图片</td>
+              {
+                userInfo && (userInfo.jurisdiction > 1 ? <td>编辑</td> : '')
+              }
             </tr>
           </thead>
           <tbody>
@@ -81,7 +85,10 @@ class Home extends Component {
                       lightboxOpen: true,
                       lightboxImages: legoData[index]['images']
                     })
-                  }}>查看</td>
+                  }}><button>查看</button></td>
+                  {
+                    userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'}>编辑</button></td> : '')
+                  }
                 </tr>
               )) : <tr><td colSpan='5'>暂无数据！</td></tr>
             }
