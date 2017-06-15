@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Lightbox from 'react-image-lightbox';
+import EditModal from './editModal'
 
 import homeCss from '../stylesheets/home.less'
 
@@ -16,7 +17,9 @@ class Home extends Component {
       userInfo: null,
       lightboxOpen: false,
       lightboxImages: [],
-      lightboxIndex: 0
+      lightboxIndex: 0,
+      editModalShow: false,
+      currentlyEditing: null
     }
   }
   componentDidMount = async () => {
@@ -53,11 +56,16 @@ class Home extends Component {
       })
     }
   }
+  toggleEditModal = () => {
+    this.setState(({editModalShow}) => ({
+      editModalShow: !editModalShow
+    }))
+  }
   render () {
     let {legoData, userInfo, lightboxOpen, lightboxIndex, lightboxImages} = this.state
     return (
       <div className={homeCss.wrapper}>
-        <p className={homeCss.addBtn}><button className={'btn-primary'}>新增</button></p>
+        <p className={homeCss.addBtn}><button className={'btn-primary'} onClick={this.toggleEditModal}>新增</button></p>
         <table>
           <thead>
             <tr>
@@ -107,7 +115,10 @@ class Home extends Component {
                   lightboxIndex: (lightboxIndex + 1) % lightboxImages.length,
               })}
           />
-      }
+        }
+        {
+          this.state.editModalShow && <EditModal toggleEditModal={this.toggleEditModal} currentlyEditing={this.state.currentlyEditing}/>
+        }
       </div>
     )
   }
