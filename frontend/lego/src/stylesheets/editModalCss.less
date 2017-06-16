@@ -62,12 +62,32 @@
   }
   .photoContainer {
     margin-top: 1em;
-    > * {
+    > div {
       display: inline-block;
       width: 10rem;
       height: 10rem;
       vertical-align: middle;
       margin: .5rem;
+      position: relative;
+      > img {
+        max-width: 100%;
+      }
+      > span {
+        color: #fff;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: red;
+        width: 1.5em;
+        height: 1.5em;
+        line-height: 1.5em;
+        text-align: center;
+        border-radius: 50%;
+        cursor: pointer;
+        &:hover {
+          background-color: lighten(red, 20%);
+        }
+      }
     }
     > .addPhotoBtn {
       font-size: 8em;

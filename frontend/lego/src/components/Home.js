@@ -38,28 +38,45 @@ class Home extends Component {
       legoData
     })
   }
-  chooseRow = (setNo) => {
-    if (this.state.checkedSet.includes(setNo)) {
-      let index = this.state.checkedSet.indexOf(setNo)
-      this.setState(prevState => {
-        prevState.checkedSet.splice(index, 1)
-        return {
-          checkedSet: prevState.checkedSet
-        }
-      })
-    } else {
-      this.setState(prevState => {
-        prevState.checkedSet.push(setNo)
-        return {
-          checkedSet: prevState.checkedSet
-        }
-      })
-    }
+  // chooseRow = (setNo) => {
+  //   if (this.state.checkedSet.includes(setNo)) {
+  //     let index = this.state.checkedSet.indexOf(setNo)
+  //     this.setState(prevState => {
+  //       prevState.checkedSet.splice(index, 1)
+  //       return {
+  //         checkedSet: prevState.checkedSet
+  //       }
+  //     })
+  //   } else {
+  //     this.setState(prevState => {
+  //       prevState.checkedSet.push(setNo)
+  //       return {
+  //         checkedSet: prevState.checkedSet
+  //       }
+  //     })
+  //   }
+  // }
+  fetchSets = async () => {
+    let legoData = JSON.parse(await xhr.get(`${config.rootURL}/api/lego`))
+    this.setState({
+      legoData
+    })
+  }
+  editSet = (set) => {
+    console.log(set)
+  }
+  deleteSet = (set) => {
+    console.log(set)
   }
   toggleEditModal = () => {
-    this.setState(({editModalShow}) => ({
-      editModalShow: !editModalShow
-    }))
+    this.setState(({editModalShow}) => {
+      if (editModalShow === true) {
+        this.fetchSets()
+      }
+      return {
+        editModalShow: !editModalShow
+      }
+    })
   }
   render () {
     let {legoData, userInfo, lightboxOpen, lightboxIndex, lightboxImages} = this.state
@@ -69,7 +86,6 @@ class Home extends Component {
         <table>
           <thead>
             <tr>
-              <td>选中</td>
               <td>编号</td>
               <td>系列</td>
               <td>库存</td>
@@ -77,25 +93,30 @@ class Home extends Component {
               {
                 userInfo && (userInfo.jurisdiction > 1 ? <td>编辑</td> : '')
               }
+              {
+                userInfo && (userInfo.jurisdiction > 1 ? <td>删除</td> : '')
+              }
             </tr>
           </thead>
           <tbody>
             {
               legoData.length ? legoData.map((item, index) => (
-                <tr key={item.no} onClick={(e) => this.chooseRow(item.no, index)}>
-                  <td><input type='checkbox' checked={this.state.checkedSet.includes(item.no)}/></td>
+                <tr key={item._id}>
                   <td>{item.no}</td>
-                  <td>{item.theme}</td>
+                  <td>{item.theme.cnName}({item.theme.engName})</td>
                   <td>{item.stock}</td>
                   <td onClick={(e) => {
                     e.stopPropagation()
                     this.setState({
                       lightboxOpen: true,
-                      lightboxImages: legoData[index]['images']
+                      lightboxImages: legoData[index]['photos']
                     })
                   }}><button>查看</button></td>
                   {
-                    userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'}>编辑</button></td> : '')
+                    userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.editSet(item)}>编辑</button></td> : '')
+                  }
+                  {
+                    userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.deleteSet(item)}>删除</button></td> : '')
                   }
                 </tr>
               )) : <tr><td colSpan='5'>暂无数据！</td></tr>

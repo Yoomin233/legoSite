@@ -5,7 +5,8 @@ import ThemeInput from './themeInput'
 import editModalCss from '../stylesheets/editModalCss.less'
 
 import {
-  get as xhrGet
+  get as xhrGet,
+  post as xhrPost
 } from '../tools/xhr.js'
 import config from '../config'
 
@@ -68,6 +69,12 @@ class editModal extends Component {
       photoInputShow: false
     }))
   }
+  deletePhoto = (photo) => {
+    let deletedIndex = this.state.photos.indexOf(photo)
+    this.setState(({photos}) => ({
+      photos: photos.filter((item, index) => index !== deletedIndex)
+    }))
+  }
   closeModal = () => {
     this.setState({
       wrapperBg: 'rgba(0,0,0,0.0)',
@@ -77,11 +84,26 @@ class editModal extends Component {
       this.props.toggleEditModal()
     }, 300)
   }
-  submit = () => {
+  submit = async () => {
     let no = this.noInput.value
     let theme = this.state.selectedTheme
     let stock = this.stockInput.value
+    let photos = this.state.photos
     if (!no || !theme || !stock) return alert('请填写项目!')
+    let saveResult = JSON.parse(await xhrPost(`${config.rootURL}/api/lego`, {
+      no,
+      theme,
+      stock,
+      photos: encodeURIComponent(JSON.stringify(photos))
+    }))
+    if (saveResult.code === 1) {
+      this.closeModal()
+      setTimeout(() => {
+        alert('保存成功!')
+      }, 300)
+    } else {
+      alert('出错了!')
+    }
   }
   render () {
     return (
@@ -105,7 +127,12 @@ class editModal extends Component {
             <label htmlFor='photos'>图片:</label>
             <div className={editModalCss.photoContainer}>
               {
-                this.state.photos.map((photo) => <img alt='' key={photo.url} src={photo.url} />)
+                this.state.photos.map((photo) =>
+                  <div key={photo.url}>
+                    <img alt='' src={photo.url}/>
+                    <span onClick={(e) => this.deletePhoto(photo)}>X
+                    </span>
+                  </div>)
                 .concat(<div key='add' className={editModalCss.addPhotoBtn} onClick={this.togglePhotoInput}>+</div>)
               }
             </div>

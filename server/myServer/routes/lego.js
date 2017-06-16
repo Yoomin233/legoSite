@@ -4,52 +4,34 @@ var router = express.Router();
 const legoModel = require('../models/legoModel')
 const themesModel = require('../models/themesModel')
 
-router.get('/', (req, res, next) => {
-  res.json([
-    {
-      no: 42009,
-      theme: '科技(Technic)',
-      stock: 2,
-      images: [
-        {
-          url:'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42009_alt6?$main$'
-        },
-        {
-          url: 'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42009_alt5?$main$'
-        }
-      ]
-    },
-    {
-      no: 42030,
-      theme: '科技(Technic)',
-      stock: 2,
-      images: [
-        {
-          url:'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42030_alt5?$main$'
-        },
-        {
-          url: 'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42030_alt6?$main$'
-        }
-      ]
-    },
-    {
-      no: 42043,
-      theme: '科技(Technic)',
-      stock: 2,
-      images: [
-        {
-          url:'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42043_alt1?$main$'
-        },
-        {
-          url: 'https://sh-s7-live-s.legocdn.com/is/image//LEGO/42043_alt2?$main$'
-        }
-      ]
-    }
-  ])
+// 获取全部set
+router.get('/', async (req, res, next) => {
+  let allSets = await legoModel.find({}).populate('theme')
+  res.json(allSets)
+})
+// 增加新set
+router.post('/', async (req, res, next) => {
+  try {
+    let newSet = new legoModel ({
+      no: req.body.no,
+      theme: req.body.theme,
+      stock: req.body.stock,
+      photos: JSON.parse(req.body.photos)
+    })
+    console.log(newSet)
+    let saveResult = await newSet.save()
+    res.json({
+      code: 1,
+      message: 'save success'
+    })
+  } catch (e) {
+    next(e)
+  }
 })
 
+// 系列路由
 router.get('/themes', async (req, res, next) => {
-  let allThemes = await themesModel.find()
+  let allThemes = await themesModel.find({})
   res.json(allThemes)
 })
 

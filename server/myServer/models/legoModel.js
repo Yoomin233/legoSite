@@ -7,14 +7,14 @@ const legoSchema = Schema({
     required: true,
   },
   theme: {
-    type: String,
-    require: true,
-    default: ''
+    type: Schema.ObjectId,
+    ref: 'themesModel',
+    required: true
   },
   stock: {
     type: Number
   },
-  photo: [
+  photos: [
     {
       url: {
         type: String,
