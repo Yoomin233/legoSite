@@ -43,6 +43,7 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
+  httpOnly: false,
   store: new MongoStore({
     mongooseConnection: db
   })
@@ -52,8 +53,8 @@ app.use(cors())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/lego', express.static(path.join(__dirname, 'public/lego')))
 
-app.use('/', index);
 app.use('/users', users);
+app.use('/', index);
 
 app.use('/api/lego', lego)
 app.use('/api/blog', blog)

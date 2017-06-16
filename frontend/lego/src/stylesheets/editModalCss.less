@@ -9,7 +9,8 @@
   .modal {
     position: absolute;
     width: 80%;
-    height: 50%;
+    max-height: 60%;
+    overflow: scroll;
     left: 0;
     right: 0;
     bottom: 0;
@@ -38,9 +39,11 @@
         border: none;
         width: 100%;
         box-shadow: 0px 0px 1px 1px #4b66d7;
-        padding: .6em;
+        padding: .4em;
         border-radius: 4px;
         transition: all .3s ease;
+        box-sizing: border-box;
+        font-size: 1.2em;
         &:focus, &:active {
           outline-offset: 0;
           outline: none;
@@ -55,6 +58,23 @@
         color: #fff;
         width: 15%;
       }
+    }
+  }
+  .photoContainer {
+    margin-top: 1em;
+    > * {
+      display: inline-block;
+      width: 10rem;
+      height: 10rem;
+      vertical-align: middle;
+      margin: .5rem;
+    }
+    > .addPhotoBtn {
+      font-size: 8em;
+      line-height: 8rem;
+      text-align: center;
+      color: #999;
+      outline: 1px dashed #999;
     }
   }
 }

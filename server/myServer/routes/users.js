@@ -19,6 +19,7 @@ router.post('/login', async (req, res, next) => {
     if (findUser.password === req.body.password) {
       // 登录成功后, 附加session相关信息
       sess.user = findUser
+      console.log(sess)
       respObject = {
         code: 1,
         message: "success"

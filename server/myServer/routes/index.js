@@ -7,6 +7,7 @@ const title = '我的站点'
 router.get('/', function(req, res, next) {
   let sess = req.session
   // 已经登录
+  console.log(req.session)
   if (sess.user) {
     res.render('index', {
       title,
