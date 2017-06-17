@@ -6,6 +6,10 @@ import EditModal from './editModal'
 import homeCss from '../stylesheets/home.less'
 
 import xhr from '../tools/xhr'
+import {
+  del as xhrDelete,
+  put as xhrPut
+} from '../tools/xhr'
 import config from '../config'
 
 class Home extends Component {
@@ -68,8 +72,18 @@ class Home extends Component {
       currentlyEditing: set
     })
   }
-  deleteSet = (set) => {
-    console.log(set)
+  deleteSet = async (set) => {
+    let confirm = prompt(`确认删除: ${set.no}`)
+    if (confirm !== null) {
+      let delRes = JSON.parse(await xhrPut(`${config.rootURL}/api/lego/delete/${set._id}`))
+      if (delRes.code === 1) {
+        alert('删除成功!')
+        this.fetchSets()
+      } else {
+        alert('删除失败!')
+        this.fetchSets()
+      }
+    }
   }
   // 关闭编辑框
   toggleEditModal = () => {
@@ -112,10 +126,14 @@ class Home extends Component {
                   <td>{item.stock}</td>
                   <td onClick={(e) => {
                     e.stopPropagation()
-                    this.setState({
-                      lightboxOpen: true,
-                      lightboxImages: legoData[index]['photos']
-                    })
+                    if (legoData[index]['photos'].length) {
+                      this.setState({
+                        lightboxOpen: true,
+                        lightboxImages: legoData[index]['photos']
+                      })
+                    } else {
+                      alert('没有图片！')
+                    }
                   }}><button>查看</button></td>
                   {
                     userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.editSet(item)}>编辑</button></td> : '')

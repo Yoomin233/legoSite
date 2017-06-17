@@ -50,6 +50,28 @@ router.put('/', async (req, res, next) => {
   }
 })
 
+// 删除set
+router.put('/delete/:_id', async (req, res, next) => {
+  try {
+    let deleteRes = await legoModel.findOneAndRemove({
+      _id: req.params._id
+    })
+    if (deleteRes) {
+      res.json({
+        code: 1,
+        message: 'delete success!'
+      })
+    } else {
+      res.json({
+        code: -1,
+        messages: 'delete fail!'
+      })
+    }
+  } catch (e) {
+    next(e)
+  }
+})
+
 // 系列路由
 router.get('/themes', async (req, res, next) => {
   let allThemes = await themesModel.find({})
