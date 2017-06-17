@@ -6,7 +6,8 @@ import editModalCss from '../stylesheets/editModalCss.less'
 
 import {
   get as xhrGet,
-  post as xhrPost
+  post as xhrPost,
+  put as xhrPut
 } from '../tools/xhr.js'
 import config from '../config'
 
@@ -18,8 +19,8 @@ class editModal extends Component {
       modalPos: 'translateY(-200%)',
       photoInputShow: false,
       themes: [],
-      selectedTheme: '',
-      photos: []
+      selectedTheme: this.props.currentlyEditing ? this.props.currentlyEditing.theme._id : '',
+      photos: this.props.currentlyEditing ? this.props.currentlyEditing.photos : []
     }
   }
   // 进入动效
@@ -89,23 +90,36 @@ class editModal extends Component {
     let theme = this.state.selectedTheme
     let stock = this.stockInput.value
     let photos = this.state.photos
+    let saveResult
     if (!no || !theme || !stock) return alert('请填写项目!')
-    let saveResult = JSON.parse(await xhrPost(`${config.rootURL}/api/lego`, {
-      no,
-      theme,
-      stock,
-      photos: encodeURIComponent(JSON.stringify(photos))
-    }))
+    // 更新操作
+    if (this.props.currentlyEditing) {
+      saveResult = JSON.parse(await xhrPut(`${config.rootURL}/api/lego`, {
+        _id: this.props.currentlyEditing._id,
+        no,
+        theme,
+        stock,
+        photos: encodeURIComponent(JSON.stringify(photos))
+      }))
+    } else {
+      saveResult = JSON.parse(await xhrPost(`${config.rootURL}/api/lego`, {
+        no,
+        theme,
+        stock,
+        photos: encodeURIComponent(JSON.stringify(photos))
+      }))
+    }
     if (saveResult.code === 1) {
       this.closeModal()
       setTimeout(() => {
-        alert('保存成功!')
+        alert(`${this.props.currentlyEditing ? '修改' : '保存'}成功!`)
       }, 300)
     } else {
       alert('出错了!')
     }
   }
   render () {
+    let {currentlyEditing} = this.props
     return (
       <div
         className={editModalCss.wrapper}
@@ -119,11 +133,11 @@ class editModal extends Component {
           }} className={editModalCss.closeBtn}>X</span>
           <form>
             <label htmlFor='no'>编号:</label>
-            <input name='no' type='text' ref={input => this.noInput = input} required/>
+            <input name='no' type='text' ref={input => this.noInput = input} defaultValue={currentlyEditing ? currentlyEditing.no : ''} required/>
             <label htmlFor='theme'>系列:</label>
             <ThemeInput themes={this.state.themes} selectedTheme={this.state.selectedTheme} updateThemeList={this.updateThemeList} selectTheme={this.selectTheme}/>
             <label htmlFor='stock'>库存:</label>
-            <input name='stock' type='number' required min='1' max='100' ref={input => this.stockInput = input}/>
+            <input name='stock' type='number' required min='1' max='100' ref={input => this.stockInput = input} defaultValue={currentlyEditing ? currentlyEditing.stock : ''}/>
             <label htmlFor='photos'>图片:</label>
             <div className={editModalCss.photoContainer}>
               {

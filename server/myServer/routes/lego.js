@@ -18,11 +18,32 @@ router.post('/', async (req, res, next) => {
       stock: req.body.stock,
       photos: JSON.parse(req.body.photos)
     })
-    console.log(newSet)
     let saveResult = await newSet.save()
     res.json({
       code: 1,
       message: 'save success'
+    })
+  } catch (e) {
+    next(e)
+  }
+})
+
+// 修改set
+router.put('/', async (req, res, next) => {
+  // console.log(req.body)
+  try {
+    let updateResult = await legoModel.findOneAndUpdate({
+      _id: req.body._id
+    }, {
+      no: req.body.no,
+      theme: req.body.theme,
+      stock: req.body.stock,
+      photos: JSON.parse(req.body.photos)
+    })
+    // console.log(updateResult)
+    res.json({
+      code: 1,
+      message: 'success'
     })
   } catch (e) {
     next(e)

@@ -63,17 +63,22 @@ class Home extends Component {
     })
   }
   editSet = (set) => {
-    console.log(set)
+    this.setState({
+      editModalShow: true,
+      currentlyEditing: set
+    })
   }
   deleteSet = (set) => {
     console.log(set)
   }
+  // 关闭编辑框
   toggleEditModal = () => {
     this.setState(({editModalShow}) => {
       if (editModalShow === true) {
         this.fetchSets()
       }
       return {
+        currentlyEditing: null,
         editModalShow: !editModalShow
       }
     })
