@@ -16,8 +16,6 @@ class Home extends Component {
     super(props)
     this.state = {
       legoData: [],
-      checkedSet: [],
-      userInfo: null,
       lightboxOpen: false,
       lightboxImages: [],
       lightboxIndex: 0,
@@ -26,16 +24,7 @@ class Home extends Component {
     }
   }
   componentDidMount = async () => {
-    let userInfo
     let legoData
-    if (process.env.NODE_ENV === 'development') {
-      userInfo = JSON.parse('{"username":"user3","jurisdiction":3}')
-    } else {
-      userInfo = JSON.parse(await xhr.get(`${config.rootURL}/api/user`))
-    }
-    this.setState({
-      userInfo
-    })
     legoData = JSON.parse(await xhr.get(`${config.rootURL}/api/lego`))
     this.setState({
       legoData
@@ -97,54 +86,62 @@ class Home extends Component {
     })
   }
   render () {
-    let {legoData, userInfo, lightboxOpen, lightboxIndex, lightboxImages} = this.state
+    let {legoData, lightboxOpen, lightboxIndex, lightboxImages} = this.state
+    let {userInfo} = this.props
     return (
       <div className={homeCss.wrapper}>
-        <p className={homeCss.addBtn}><button className={'btn-primary'} onClick={this.toggleEditModal}>新增</button></p>
-        <table>
-          <thead>
-            <tr>
-              <td>编号</td>
-              <td>系列</td>
-              <td>库存</td>
-              <td>图片</td>
+        {
+          userInfo && (userInfo.jurisdiction > 1 ? <p className={homeCss.addBtn}><button className={'btn-primary'} onClick={this.toggleEditModal}>新增</button></p> : <p>&nbsp;</p>)
+        }
+        <div style={{
+          width: '100%',
+          overflowX: 'scroll'
+        }}>
+          <table>
+            <thead>
+              <tr>
+                <td>编号</td>
+                <td>系列</td>
+                <td>库存</td>
+                <td>图片</td>
+                {
+                  userInfo && (userInfo.jurisdiction > 1 ? <td>编辑</td> : null)
+                }
+                {
+                  userInfo && (userInfo.jurisdiction > 1 ? <td>删除</td> : null)
+                }
+              </tr>
+            </thead>
+            <tbody>
               {
-                userInfo && (userInfo.jurisdiction > 1 ? <td>编辑</td> : '')
-              }
-              {
-                userInfo && (userInfo.jurisdiction > 1 ? <td>删除</td> : '')
-              }
-            </tr>
-          </thead>
-          <tbody>
-            {
-              legoData.length ? legoData.map((item, index) => (
-                <tr key={item._id}>
-                  <td>{item.no}</td>
-                  <td>{item.theme.cnName}({item.theme.engName})</td>
-                  <td>{item.stock}</td>
-                  <td onClick={(e) => {
-                    e.stopPropagation()
-                    if (legoData[index]['photos'].length) {
-                      this.setState({
-                        lightboxOpen: true,
-                        lightboxImages: legoData[index]['photos']
-                      })
-                    } else {
-                      alert('没有图片！')
+                legoData.length ? legoData.map((item, index) => (
+                  <tr key={item._id}>
+                    <td>{item.no}</td>
+                    <td>{item.theme.cnName}({item.theme.engName})</td>
+                    <td>{item.stock}</td>
+                    <td onClick={(e) => {
+                      e.stopPropagation()
+                      if (legoData[index]['photos'].length) {
+                        this.setState({
+                          lightboxOpen: true,
+                          lightboxImages: legoData[index]['photos']
+                        })
+                      } else {
+                        alert('没有图片！')
+                      }
+                    }}><button>查看</button></td>
+                    {
+                      userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.editSet(item)}>编辑</button></td> : null)
                     }
-                  }}><button>查看</button></td>
-                  {
-                    userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.editSet(item)}>编辑</button></td> : '')
-                  }
-                  {
-                    userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.deleteSet(item)}>删除</button></td> : '')
-                  }
-                </tr>
-              )) : <tr><td colSpan='5'>暂无数据！</td></tr>
-            }
-          </tbody>
-        </table>
+                    {
+                      userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.deleteSet(item)}>删除</button></td> : null)
+                    }
+                  </tr>
+                )) : <tr><td colSpan='5'>暂无数据！</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
         {lightboxOpen &&
           <Lightbox
               mainSrc={lightboxImages[lightboxIndex].url}

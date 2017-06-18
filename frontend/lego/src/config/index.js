@@ -1,9 +1,11 @@
 const config = {
   development: {
-    rootURL: 'http://localhost:3080'
+    rootURL: 'http://47.94.196.246:3080',
+    rootPath: '/'
   },
   production: {
-    rootURL: 'http://localhost:3080'
+    rootURL: 'http://47.94.196.246:3080',
+    rootPath: '/lego/'
   }
 }
 

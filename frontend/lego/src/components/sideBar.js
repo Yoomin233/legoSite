@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import appCss from '../stylesheets/App.less'
 
+import config from '../config'
+
 class sideBar extends Component {
   componentDidMount = () => {
     this.sideBar.addEventListener('transitionend', (e) => {
@@ -14,12 +16,16 @@ class sideBar extends Component {
     (nextProps.sideBarShow) && (this.sideBarShade.style.display = 'block')
   }
   render () {
-    let {sideBarShow, toggleSideBar} = this.props
+    let {sideBarShow, toggleSideBar, userInfo} = this.props
+    let jurisdiction
+    userInfo && (jurisdiction = (userInfo.jurisdiction === 3 ? '超级管理员' : userInfo.jurisdiction === 2 ? '管理员' : '游客'))
     return (
       <div className={`${appCss.sideBar} ${sideBarShow ? appCss.sideBarShowed : ''}`} ref={(elem) => {this.sideBar = elem}} onClick={toggleSideBar}>
-        <li><Link to="/lego/">首页</Link></li>
-        <li><Link to="/lego/about">管理</Link></li>
-        <li><Link to="/lego/about">关于</Link></li>
+        <h3>{userInfo && `用户: ${userInfo.username}`}</h3>
+        <h3>{userInfo && `权限: ${jurisdiction}`}</h3>
+        <li><Link to={`${config.rootPath}`}>首页</Link></li>
+        <li><Link to={`${config.rootPath}about`}>关于</Link></li>
+        <li><a href='/'>回主站</a></li>
         <div className={`${appCss.sideBarShade}`} ref={(elem) => {this.sideBarShade = elem}} onClick={toggleSideBar}></div>
       </div>
     )

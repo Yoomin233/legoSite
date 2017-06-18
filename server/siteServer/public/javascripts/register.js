@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/javascripts/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -78,7 +78,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var config = {
   development: {
-    rootURL: 'http://localhost:3080'
+    rootURL: 'http://47.94.196.246:3080'
   },
   production: {
     rootURL: 'http://47.94.196.246:3080'
@@ -410,7 +410,8 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 /***/ }),
 /* 3 */,
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -430,15 +431,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _document$querySelect = document.querySelector('form'),
     username = _document$querySelect.username,
-    password = _document$querySelect.password;
+    password = _document$querySelect.password,
+    passwordAgain = _document$querySelect.passwordAgain;
 
-document.querySelector('button.login').addEventListener('click', function (e) {
+document.querySelector('button.gobackLogin').addEventListener('click', function (e) {
   e.preventDefault();
-  if (!username.value || !password.value) {
+  history.back();
+});
+document.querySelector('button.register').addEventListener('click', function (e) {
+  e.preventDefault();
+  if (!username.value || !password.value || !passwordAgain.value) {
     return alert('请填写用户名/密码先!');
+  } else if (password.value !== passwordAgain.value) {
+    return alert('输入不一致!');
   }
   (0, _tools.sendAjax)({
-    url: _config2.default.rootURL + '/users/login',
+    url: _config2.default.rootURL + '/users/register',
     method: 'POST',
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     data: 'username=' + username.value + '&password=' + (0, _blueimpMd2.default)(password.value),
@@ -447,16 +455,12 @@ document.querySelector('button.login').addEventListener('click', function (e) {
       if (result.code !== 1) {
         return alert(result.message);
       } else {
-        alert('登录成功!'
+        alert('注册成功!'
         // 前往网站根目录
         );location.href = location.origin;
       }
     }
   });
-});
-document.querySelector('button.register').addEventListener('click', function (e) {
-  e.preventDefault();
-  location.href = /^(.*)login\.html/.exec(location.href)[1] + 'register.html';
 });
 
 /***/ })

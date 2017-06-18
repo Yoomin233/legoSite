@@ -16,7 +16,8 @@ router.get('/', (req, res, next) => {
     } else {
       res.json({
         code: 1,
-        username: '游客'
+        username: '游客',
+        jurisdiction: 1
       })
     }
   } catch (e)  {

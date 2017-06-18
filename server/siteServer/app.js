@@ -21,10 +21,12 @@ var user = require('./routes/user')
 
 var app = express();
 
+const mongodbAddr = process.env.NODE_ENV === 'production' ? 'mongodb://localhost:10220' : 'mongodb://47.94.196.246:10220'
+
 // connecting to db
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://47.94.196.246:10220')
+mongoose.connect(mongodbAddr)
 const db = mongoose.connection
 db.once('open', () => console.log(`mongodb connected!, env: ${process.env.NODE_ENV}`))
 db.on('error', console.error.bind(console, 'MongoDB connection errr:'));

@@ -1,0 +1,55 @@
+.wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  perspective: 500px;
+  padding-top: 80vh;
+  box-sizing: border-box;
+  text-align: center;
+  color: #444;
+  > div {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #ccc;
+    transition: transform 1s ease, opacity .5s .5s ease;
+  }
+  > div:nth-child(1) {
+    left: 0;
+    top: 0;
+    transform-origin: left;
+  }
+  > div:nth-child(2) {
+    right: 0;
+    top: 0;
+    transform-origin: right;
+  }
+  > h2, > p {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #444;
+    z-index: 2;
+    transition: all .8s ease;
+  }
+  > h2 {
+    top: 30vh;
+  }
+  > p {
+    top: 80vh;
+    position: absolute;
+  }
+  &.loadingComplete {
+    * {
+      opacity: 0;
+    }
+    > div:nth-child(1) {
+      transform: rotateY(60deg);
+    }
+    > div:nth-child(2) {
+      transform: rotateY(-60deg);
+    }
+  }
+}
