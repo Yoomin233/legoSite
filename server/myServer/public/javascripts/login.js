@@ -78,10 +78,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 var config = {
   development: {
-    rootURL: 'http://192.168.27.110:3080'
+    rootURL: 'http://47.94.196.246:3080'
   },
   production: {
-    rootURL: 'http://192.168.27.110:3080'
+    rootURL: 'http://47.94.196.246:3080'
   }
 };
 

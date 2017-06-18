@@ -1,3 +1,4 @@
 NODE_MODULES/
 .DS_STORE
 database/journal
+*.tar.gz
