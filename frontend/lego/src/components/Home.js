@@ -7,7 +7,6 @@ import homeCss from '../stylesheets/home.less'
 
 import xhr from '../tools/xhr'
 import {
-  del as xhrDelete,
   put as xhrPut
 } from '../tools/xhr'
 import config from '../config'
@@ -32,7 +31,7 @@ class Home extends Component {
     if (process.env.NODE_ENV === 'development') {
       userInfo = JSON.parse('{"username":"user3","jurisdiction":3}')
     } else {
-      userInfo = JSON.parse(await xhr.get(`${config.rootURL}/api/user`)).user
+      userInfo = JSON.parse(await xhr.get(`${config.rootURL}/api/user`))
     }
     this.setState({
       userInfo

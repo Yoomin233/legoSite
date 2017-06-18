@@ -78,7 +78,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var config = {
   development: {
-    rootURL: 'http://47.94.196.246:3080'
+    rootURL: 'http://localhost:3080'
   },
   production: {
     rootURL: 'http://47.94.196.246:3080'

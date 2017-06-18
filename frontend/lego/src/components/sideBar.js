@@ -17,9 +17,9 @@ class sideBar extends Component {
     let {sideBarShow, toggleSideBar} = this.props
     return (
       <div className={`${appCss.sideBar} ${sideBarShow ? appCss.sideBarShowed : ''}`} ref={(elem) => {this.sideBar = elem}} onClick={toggleSideBar}>
-        <li><Link to="/">首页</Link></li>
-        <li><Link to="/about">管理</Link></li>
-        <li><Link to="/about">关于</Link></li>
+        <li><Link to="/lego/">首页</Link></li>
+        <li><Link to="/lego/about">管理</Link></li>
+        <li><Link to="/lego/about">关于</Link></li>
         <div className={`${appCss.sideBarShade}`} ref={(elem) => {this.sideBarShade = elem}} onClick={toggleSideBar}></div>
       </div>
     )

@@ -41,8 +41,8 @@ class App extends Component {
           <LoadingIndicator></LoadingIndicator>
           <Header sideBarShow={sideBarShow} toggleSideBar={this.toggleSideBar}></Header>
           <SideBar sideBarShow={sideBarShow} toggleSideBar={this.toggleSideBar}></SideBar>
-          <Route exact path="/" component={Home}/>
-          <Route path="/about" component={About}/>
+          <Route exact path="/lego/" component={Home}/>
+          <Route path="/lego/about" component={About}/>
         </div>
       </Router>
     );
