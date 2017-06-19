@@ -54,6 +54,7 @@ app.use(cors())
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/lego', express.static(path.join(__dirname, 'public/lego')))
+app.use('/blog', express.static(path.join(__dirname, 'public/blog')))
 
 app.use('/users', users);
 app.use('/', index);
