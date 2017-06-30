@@ -66,8 +66,16 @@ class App extends Component {
       <Router>
         <div style={{width: '100%',height: '100%', position: 'relative', overflow: 'hidden'}}>
           <LoadingIndicator></LoadingIndicator>
-          <Header sideBarShow={sideBarShow} toggleSideBar={this.toggleSideBar}></Header>
-          <SideBar sideBarShow={sideBarShow} toggleSideBar={this.toggleSideBar} userInfo={this.state.userInfo}></SideBar>
+          <Header
+            sideBarShow={sideBarShow}
+            toggleSideBar={this.toggleSideBar}
+          >
+          </Header>
+          <SideBar
+            sideBarShow={sideBarShow}
+            toggleSideBar={this.toggleSideBar}
+            userInfo={this.state.userInfo}
+          ></SideBar>
           <Route exact path={`${config.rootPath}`} render={(props) => (
             <Home userInfo={userInfo} {...props}>
             </Home>

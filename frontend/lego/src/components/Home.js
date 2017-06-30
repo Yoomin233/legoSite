@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Lightbox from 'react-image-lightbox';
-import EditModal from './editModal'
 
 import homeCss from '../stylesheets/home.less'
 
@@ -10,6 +9,9 @@ import {
   put as xhrPut
 } from '../tools/xhr'
 import config from '../config'
+
+import EditModal from './editModal'
+import ItemRow from './itemRow'
 
 class Home extends Component {
   constructor (props) {
@@ -24,34 +26,18 @@ class Home extends Component {
     }
   }
   componentDidMount = async () => {
-    let legoData
-    legoData = JSON.parse(await xhr.get(`${config.rootURL}/api/lego`))
-    this.setState({
-      legoData
-    })
+    this.fetchSets()
   }
-  // chooseRow = (setNo) => {
-  //   if (this.state.checkedSet.includes(setNo)) {
-  //     let index = this.state.checkedSet.indexOf(setNo)
-  //     this.setState(prevState => {
-  //       prevState.checkedSet.splice(index, 1)
-  //       return {
-  //         checkedSet: prevState.checkedSet
-  //       }
-  //     })
-  //   } else {
-  //     this.setState(prevState => {
-  //       prevState.checkedSet.push(setNo)
-  //       return {
-  //         checkedSet: prevState.checkedSet
-  //       }
-  //     })
-  //   }
-  // }
   fetchSets = async () => {
     let legoData = JSON.parse(await xhr.get(`${config.rootURL}/api/lego`))
     this.setState({
       legoData
+    })
+  }
+  showLightbox = (index) => {
+    this.setState({
+      lightboxOpen: true,
+      lightboxImages: this.state.legoData[index]['photos']
     })
   }
   editSet = (set) => {
@@ -93,10 +79,7 @@ class Home extends Component {
         {
           userInfo && (userInfo.jurisdiction > 1 ? <p className={homeCss.addBtn}><button className={'btn-primary'} onClick={this.toggleEditModal}>新增</button></p> : <p>&nbsp;</p>)
         }
-        <div style={{
-          width: '100%',
-          overflowX: 'scroll'
-        }}>
+        <div className={homeCss.contentWrapper}>
           <table>
             <thead>
               <tr>
@@ -115,28 +98,15 @@ class Home extends Component {
             <tbody>
               {
                 legoData.length ? legoData.map((item, index) => (
-                  <tr key={item._id}>
-                    <td>{item.no}</td>
-                    <td>{item.theme.cnName}({item.theme.engName})</td>
-                    <td>{item.stock}</td>
-                    <td onClick={(e) => {
-                      e.stopPropagation()
-                      if (legoData[index]['photos'].length) {
-                        this.setState({
-                          lightboxOpen: true,
-                          lightboxImages: legoData[index]['photos']
-                        })
-                      } else {
-                        alert('没有图片！')
-                      }
-                    }}><button>查看</button></td>
-                    {
-                      userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.editSet(item)}>编辑</button></td> : null)
-                    }
-                    {
-                      userInfo && (userInfo.jurisdiction > 1 ? <td><button className={'btn-info'} onClick={(e) => this.deleteSet(item)}>删除</button></td> : null)
-                    }
-                  </tr>
+                  <ItemRow
+                    key={item._id}
+                    index={index}
+                    item={item}
+                    userInfo={userInfo}
+                    showLightbox={this.showLightbox}
+                    editSet={this.editSet}
+                    deleteSet={this.deleteSet}
+                  />
                 )) : <tr><td colSpan='5'>暂无数据！</td></tr>
               }
             </tbody>
@@ -157,7 +127,11 @@ class Home extends Component {
           />
         }
         {
-          this.state.editModalShow && <EditModal toggleEditModal={this.toggleEditModal} currentlyEditing={this.state.currentlyEditing}/>
+          this.state.editModalShow &&
+          <EditModal
+            toggleEditModal={this.toggleEditModal}
+            currentlyEditing={this.state.currentlyEditing}
+          />
         }
       </div>
     )
